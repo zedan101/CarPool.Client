@@ -4,6 +4,7 @@ import { Ride } from 'src/app/model/ride.model';
 import { BookRideReq } from 'src/app/model/book-ride-req.model';
 import { RidesService } from 'src/app/services/rides.service';
 import { lastValueFrom } from 'rxjs';
+import {timeLabel}  from 'src/assets/static-data/static-data';
 
 @Component({
   selector: 'app-takeride',
@@ -13,17 +14,16 @@ import { lastValueFrom } from 'rxjs';
 export class TakeRideComponent implements OnInit {
   userName!:string;
   imgLink!:string;
-  labels:Array<string>=[];
   inputData!:BookRideReq; 
   rides: Array<Ride>=[];
   timeSelectedIdx!:number;
   isDropdown=false;
+  labels = timeLabel
   constructor(private rideService : RidesService) { }
 
   ngOnInit(): void {
     this.userName="Nitish";
     this.imgLink="../../../assets/images/logo.png";
-    this.labels.push("5am - 9am","9am-12pm","12pm - 3pm","3pm - 6pm","6pm - 9pm")
   }
 
   takeRideForm: any = new FormGroup({

@@ -1,7 +1,7 @@
 export class Ride
 {
     location:Array<string>=[];
-    date!:string; 
+    date!:Date; 
     time!:number;
     numberOfSeatsAvailable!:number;
     price!:number;

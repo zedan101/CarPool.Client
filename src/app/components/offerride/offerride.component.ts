@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { lastValueFrom } from 'rxjs';
 import { Ride } from 'src/app/model/ride.model';
 import { RidesService } from 'src/app/services/rides.service';
+import { timeLabel,seatLabel } from 'src/assets/static-data/static-data';
 
 @Component({
   selector: 'app-offerride',
@@ -14,19 +15,17 @@ export class OfferRideComponent implements OnInit {
   isNextPressed:boolean=false;
   userName!:string;
   imgLink!:string;
-  labels:Array<string>=[];
-  seatsLabel:Array<string>=[];
   seatSelectedIdx!:number;
   timeSelectedIdx!:number;
   generatedPrice = 180;
   isDropdown = false;
+  labels = timeLabel;
+  seatsLabel = seatLabel;
   constructor(private fb: FormBuilder,private rideService: RidesService) { }
 
   ngOnInit(): void {
     this.userName="Nitish";
     this.imgLink="../../../assets/images/logo.png";
-    this.labels.push("5am - 9am","9am - 12pm","12pm - 3pm","3pm - 6pm","6pm - 9pm")
-    this.seatsLabel.push("1","2","3")
   }
   offerRideForm: any = new FormGroup({
     from: new FormControl(''),
@@ -73,9 +72,6 @@ export class OfferRideComponent implements OnInit {
     console.log(ride.time,ride.numberOfSeatsAvailable);
     ride.price=180;
     ride.rideId="ride";
-    // RideOfferedBy:localStorage.getItem("loggedIn_user"),
-    ride.rideOfferedBy="LoggedInUser";
-    ride.rideTakenBy=[""];
     console.log("ok");
     var res=await lastValueFrom(this.rideService.offerRide(ride));
     console.log(res);
