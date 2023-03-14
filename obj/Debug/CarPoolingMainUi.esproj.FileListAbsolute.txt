@@ -1,0 +1,2 @@
+C:\Users\Nitish\source\repos\CarPooling\CarPoolingMainUi\obj\Debug\CarPoolingMainUi.esproj.SuggestedBindingRedirects.cache
+C:\Users\Nitish\source\repos\CarPooling\CarPoolingMainUi\obj\Debug\CarPoolingMainUi.esproj.CoreCompileInputs.cache

@@ -1,0 +1,116 @@
+<section class="row">
+  <section class="banner col col-lg-8">
+    <img
+      class="logo img-responsive"
+      src="../../../assets/images/logo.png"
+      alt=""
+    />
+    <span class="banner-text display-1">TURN <span class="yellow">MILES</span> INTO <span class="purple">MONEY</span></span>
+    <span class="banner-subtext">RIDES ON TAP</span>
+    <span></span>
+  </section>
+  <section #background class="form-background-yellow side-form col col-lg-4 ">
+      
+      <h2 class="text-center">{{title}}</h2><span class="underline"></span>
+      
+    <form *ngIf="isSignUp;else logIn"
+    [formGroup]="signUpForm"
+    (ngSubmit)="submitDetails(true)"
+    >
+      <div class="form-floating  d-flex align-items-center justify-content-center mt-3 overflow-hidden">
+          <input
+          type="email"
+          id="email"
+          class="form-control"
+          placeholder="Enter Email Id"
+          name="email"
+          formControlName="emailId"
+          required
+          />
+          <label for="email">Enter Email Id</label>
+        </div>
+        
+        <div class="form-floating d-flex align-items-center justify-content-center my-2 overflow-hidden">
+              <input
+              [type]="isVisible?'text':'password'"
+              id="password"
+              class="form-control"
+              placeholder="Enter password"
+              name="pass"
+              formControlName="password"
+              required
+              />
+              <i (click)="isVisible?isVisible=false:isVisible=true" class="bi bi-eye-fill position-absolute form-icon"></i>
+            <label for="password">Enter password</label>
+          </div>  
+        <div class="form-floating d-flex align-items-center justify-content-center my-2 overflow-hidden">
+            <input
+            type="password"
+            id="confirmPassword"
+            class="form-control"
+            placeholder="Confirm Password"
+            name="confirmpass"
+            formControlName="confirmPassword"
+            required
+            />
+            <label for="confirmPassword">Confirm Password</label>
+        </div>
+        <div class="row">
+            <button
+            type="submit"
+            class="col-12 mx-auto my-4 background-purple btn-bg "
+            [disabled]="signUpForm.invalid"
+            >
+            Submit
+            </button>
+        </div>
+    </form>
+        <div class="text-center base-text">
+            <p class="mb-0">{{baseText}}<span><a (click)="openLogIn()" >{{baseLink}}</a></span></p><span class="underline-base-text"></span>
+        </div>
+        
+        <ng-template #logIn>
+            <form
+            [formGroup]="logInForm"
+            (ngSubmit)="submitDetails(false)"
+            >
+              <div class="form-floating  d-flex align-items-center justify-content-center mt-3 overflow-hidden">
+                  <input
+                  type="email"
+                  id="email"
+                  class="form-control"
+                  placeholder="Enter Email Id"
+                  name="email"
+                  formControlName="emailId"
+                  required
+                  />
+                  <label for="email">Enter Email Id</label>
+                </div>
+                
+                <div class="form-floating d-flex align-items-center justify-content-center my-2 overflow-hidden">
+                    <input
+                    type="password"
+                    id="password"
+                    class="form-control"
+                    placeholder="Enter password"
+                    name="pass"
+                    formControlName="password"
+                    required
+                    />
+                    <label for="password">Enter password</label>
+                </div>
+                <span *ngIf="isInvalid" class="d-flex justify-content-center text-danger">Invalid Email or Password</span>
+                <div class="row">
+                    <button
+                    type="submit"
+                    class="col-12 mx-auto my-4 background-yellow btn-bg "
+                    [disabled]="logInForm.invalid"
+                    >
+                    Submit
+                    </button>
+                </div>
+            </form>
+        </ng-template>
+    
+  </section>
+</section>
