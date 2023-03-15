@@ -5,6 +5,7 @@ import { BookRideReq } from 'src/app/model/book-ride-req.model';
 import { RidesService } from 'src/app/services/rides.service';
 import { lastValueFrom } from 'rxjs';
 import {timeLabel}  from 'src/assets/static-data/static-data';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-takeride',
@@ -19,7 +20,7 @@ export class TakeRideComponent implements OnInit {
   timeSelectedIdx!:number;
   isDropdown=false;
   labels = timeLabel
-  constructor(private rideService : RidesService) { }
+  constructor(private rideService : RidesService, private router:Router) { }
 
   ngOnInit(): void {
     this.userName="Nitish";
@@ -43,19 +44,21 @@ export class TakeRideComponent implements OnInit {
   }
 
   async getMatches(){
-    this.inputData={
-      from : this.takeRideForm.get('from').value,
-      to : this.takeRideForm.get('to').value,
-      date : this.takeRideForm.get('date').value,
-      time : this.labels.findIndex(time=> time==this.takeRideForm.get('time').value)
-    }
-    this.rides = await lastValueFrom(this.rideService.getRides(this.inputData)); 
-    console.log(this.rides);
+    
+      this.inputData={
+        from : this.takeRideForm.get('from').value,
+        to : this.takeRideForm.get('to').value,
+        date : this.takeRideForm.get('date').value,
+        time : this.labels.findIndex(time=> time==this.takeRideForm.get('time').value)
+      }
+      this.rides = await lastValueFrom(this.rideService.getRides(this.inputData));   
+    
   }
 
   async booking(ride:Ride){
     var res =await lastValueFrom(this.rideService.booking(1,ride.rideId));
-    console.log(res);
+    this.takeRideForm.reset();
+    this.rides=[];
   }
 
 }

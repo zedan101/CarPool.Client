@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { Ride } from 'src/app/model/ride.model';
 import { RidesService } from 'src/app/services/rides.service';
@@ -21,21 +22,21 @@ export class OfferRideComponent implements OnInit {
   isDropdown = false;
   labels = timeLabel;
   seatsLabel = seatLabel;
-  constructor(private fb: FormBuilder,private rideService: RidesService) { }
+  constructor(private fb: FormBuilder,private rideService: RidesService,private router:Router) { }
 
   ngOnInit(): void {
     this.userName="Nitish";
     this.imgLink="../../../assets/images/logo.png";
   }
   offerRideForm: any = new FormGroup({
-    from: new FormControl(''),
+    from: new FormControl('',[Validators.required]),
     to: new FormControl('', [Validators.required]),
     date: new FormControl('', [
       Validators.required,
     ]),
-    time: new FormControl('',),
-    seats: new FormControl('',),
-    price: new FormControl('',),
+    time: new FormControl('',[Validators.required]),
+    seats: new FormControl('',[Validators.required]),
+    price: new FormControl('',[Validators.required]),
     stops: this.fb.array([this.fb.control('',)])
   });
 
@@ -52,12 +53,11 @@ export class OfferRideComponent implements OnInit {
 
   addStops(){
 
-    this.offerRideForm.controls['stops'].push(this.fb.control('',));
+    this.offerRideForm.controls['stops'].push(this.fb.control('',[Validators.required]));
     
   }
   
   async offerRide(){
-    console.log("ok");
     let ride = new Ride();
     let formArrVal = this.offerRideForm.get('stops').value;
     console.log(formArrVal);
@@ -71,10 +71,10 @@ export class OfferRideComponent implements OnInit {
     ride.numberOfSeatsAvailable=this.seatsLabel.indexOf(this.offerRideForm.get('seats').value)+1;
     console.log(ride.time,ride.numberOfSeatsAvailable);
     ride.price=180;
-    ride.rideId="ride";
-    console.log("ok");
-    var res=await lastValueFrom(this.rideService.offerRide(ride));
-    console.log(res);
+    ride.rideId="ride1";
+    await lastValueFrom(this.rideService.offerRide(ride));
+    this.offerRideForm.reset();
+    this.router.navigate(['home']);
   }
 
 }

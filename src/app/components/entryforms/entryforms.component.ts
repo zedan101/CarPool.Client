@@ -54,54 +54,65 @@ export class EntryFormsComponent implements OnInit {
   
 
   signUpForm: any = new FormGroup({
-    emailId: new FormControl(''),
+    emailId: new FormControl('',[Validators.required, Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+$')]),
     password: new FormControl('', [Validators.required]),
     confirmPassword: new FormControl('', [
       Validators.required,
     ]),
-  });
+  },);
 
   logInForm: any = new FormGroup({
-    emailId: new FormControl(''),
+    emailId: new FormControl('',[Validators.required, Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+$')]),
     password: new FormControl('', [Validators.required]),
   });
 
+  get signUp() { return this.signUpForm.controls; };
+
  async submitDetails(isSignUp : boolean){
-    if(isSignUp){
-      if(await lastValueFrom(this.userService.getEmailValidation(this.signUpForm.get('emailId').value))){
-        this.openLogIn();
-        
-      }
-      else{
-        // console.log(this.signUpForm.get('emailId').value)
-        var today =new Date();
-        this.userData={
-          userEmail:this.signUpForm.get('emailId').value,
-          profileImage:"../../../assets/images/logo.png",
-          userName:"user",
-          userId:"user"+this.datePipe.transform(today, 'ddMMyyyy'),
-          password:this.signUpForm.get('password').value
+    if(isSignUp)
+    {
+      if(this.signUpForm.valid && this.signUp.password==this.signUp.confirmPassword)
+      {
+            
+        if(await lastValueFrom(this.userService.getEmailValidation(this.signUpForm.get('emailId').value))){
+          this.openLogIn();
+          
         }
-        console.log("user"+this.datePipe.transform(today, 'ddMMyyyy'))
-        console.log(this.userData);
-        
-        let check=await lastValueFrom( this.userService.postUsers(this.userData))
-        if(check){
-          this.router.navigate(['home'])
+        else{
+          // console.log(this.signUpForm.get('emailId').value)
+          var today =new Date();
+          this.userData={
+            userEmail:this.signUpForm.get('emailId').value,
+            profileImage:"../../../assets/images/logo.png",
+            userName:"user",
+            userId:"user"+this.datePipe.transform(today, 'ddMMyyyy'),
+            password:this.signUpForm.get('password').value
+          }
+          console.log("user"+this.datePipe.transform(today, 'ddMMyyyy'))
+          console.log(this.userData);
+          
+          let check=await lastValueFrom( this.userService.postUsers(this.userData))
+          if(check){
+            this.router.navigate(['home'])
+          }
+          
         }
-        
       }
+    
     }
     else{
-       var res =await lastValueFrom(this.authService.getAuthentication(this.logInForm.get('emailId').value,this.logInForm.get('password').value));
-      if(res.token){
-        localStorage.setItem("access_token",res.token);
-        this.router.navigate(['home']);
+      if(this.logInForm.valid){
+        var res =await lastValueFrom(this.authService.getAuthentication(this.logInForm.get('emailId').value,this.logInForm.get('password').value));
+        if(res.token){
+          localStorage.setItem("access_token",res.token);
+          this.router.navigate(['home']);
+        }
+        else{
+          this.isInvalid=true
+          // this.openLogIn();
+        }
       }
-      else{
-        this.isInvalid=true
-        // this.openLogIn();
-      }
+       
     }
   }
 
